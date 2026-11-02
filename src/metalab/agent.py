@@ -14,7 +14,7 @@ class Agent:
     @property
     def health(self):
         return self.__current_health
-
+    @property
     def is_alive(self):
         return self.__current_health > 0
 
