@@ -1,7 +1,7 @@
 import pytest
 
-from src.metalab.agent import Agent
-from src.metalab.build import Build
+from metalab.agent import Agent
+from metalab.build import Build
 from contextlib import nullcontext as does_not_raise
 
 

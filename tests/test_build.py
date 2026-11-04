@@ -1,5 +1,5 @@
 import pytest
-from src.metalab.build import Build
+from metalab.build import Build
 from contextlib import nullcontext as does_not_raise
 from dataclasses import FrozenInstanceError
 
@@ -16,7 +16,11 @@ class TestBuild:
                                  (True, 10, pytest.raises(TypeError)),
                                  (7, 6, pytest.raises(ValueError)),
                              ])
-    def test_build(self, damage, health, expectation):
+    def test_build(
+            self, damage,
+            health,
+            expectation
+    ):
         with expectation:
             build = Build(damage, health)
             assert build.damage == damage
