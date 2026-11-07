@@ -1,5 +1,5 @@
 from dataclasses import dataclass, astuple
-from metalab.build_const import MAX_BUILD_POINTS
+from metalab.const.build_const import MAX_BUILD_POINTS
 
 
 
@@ -12,7 +12,7 @@ class Build:
 
         attributes = astuple(self)
         if any(type(a) is not int for a in attributes ):
-            raise TypeError(f"atr must be an integer")
+            raise TypeError(f"Attributes must be an integer")
         if sum(attributes) > MAX_BUILD_POINTS:
             raise ValueError("Build exceeds the maximum attribute points")
         if any(atr <= 0 for atr in attributes):
