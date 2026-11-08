@@ -1,5 +1,5 @@
 from src.metalab.build import Build
-
+from metalab.agent_snapshot import AgentSnapshot
 
 class Agent:
     def __init__(self, build: Build):
@@ -8,13 +8,6 @@ class Agent:
         self.__current_health = self.build.health
 
     @property
-    def damage(self):
-        return self.__current_damage
-
-    @property
-    def health(self):
-        return self.__current_health
-    @property
     def is_alive(self):
         return self.__current_health > 0
 
@@ -22,3 +15,10 @@ class Agent:
         if type(damage) is not int:
             raise TypeError("Damage must be an integer")
         self.__current_health -= damage
+
+    @property
+    def state(self) -> AgentSnapshot:
+        return AgentSnapshot(
+            health=self.__current_health,
+            damage=self.__current_damage
+        )

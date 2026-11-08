@@ -1,11 +1,13 @@
 from metalab.action import Action
-from metalab.agent_state import AgentState
 from metalab.effect import Effect, EffectTarget
+from metalab.action_rules import AttackRules
 
 
 class Attack(Action):
-    def supply_effect(self, state: AgentState) -> Effect:
+    def return_effect(self) -> Effect:
         return Effect(
-            damage=state.own_damage,
+            action_rule=AttackRules(),
             target=EffectTarget.ENEMY
         )
+
+

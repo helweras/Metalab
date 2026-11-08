@@ -1,16 +1,16 @@
-from dataclasses import dataclass, astuple
+from dataclasses import dataclass
+from metalab.agent_snapshot import AgentSnapshot
 
 
 @dataclass(frozen=True)
 class AgentState:
-    own_health: int
-    own_damage: int
-    enemy_health: int
-    enemy_damage: int
+    own_state: AgentSnapshot
+    enemy_state: AgentSnapshot
 
     def __post_init__(self):
+        if not isinstance(self.own_state, AgentSnapshot):
+            raise TypeError("own_state must be an AgentSnapshot")
 
-        attributes = astuple(self)
-        if any(type(a) is not int for a in attributes):
-            raise TypeError("AgentState attributes must be integers")
+        if not isinstance(self.enemy_state, AgentSnapshot):
+            raise TypeError("enemy_state must be an AgentSnapshot")
 
