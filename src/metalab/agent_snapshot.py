@@ -1,13 +1,17 @@
 from dataclasses import dataclass
+from types import MappingProxyType
+from typing import Mapping
+
+from metalab.attribute import Attribute
 
 
 @dataclass(frozen=True)
 class AgentSnapshot:
-    health: int
-    damage: int
+    attributes: Mapping[Attribute, int]
 
     def __post_init__(self):
-        attributes = (self.health, self.damage)
-
-        if any(type(attribute) is not int for attribute in attributes):
-            raise TypeError("Attributes must be integers")
+        object.__setattr__(
+            self,
+            "attributes",
+            MappingProxyType(dict(self.attributes))
+        )
