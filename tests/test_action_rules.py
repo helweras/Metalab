@@ -1,4 +1,4 @@
-from metalab.action_rules import ActionRules
+from metalab.action_rules.base import ActionRules
 import pytest
 
 
@@ -16,7 +16,7 @@ class TestActionRules:
 
     def test_can_instantiate_complete_subclass(self):
         class IncompleteRules(ActionRules):
-            def rule(self, state, target):
+            def calculate_effects(self, state, target):
                 pass
 
         action_rules = IncompleteRules()

@@ -316,11 +316,11 @@ BattleEngine отвечает за:
 ```text
 Agent A                 BattleEngine                 Agent B
    |                         |                           |
-   |---- AgentState -------->|                           |
-   |<------ Action ----------|                           |
+   |<------ AgentState ------|                           |
+   |                         |------ AgentState -------->|
    |                         |                           |
-   |                         |<------ Action ------------|
-   |                         |                           |
+   |------ Action ---------->|                           |
+   |                         |<--------- Action ---------|
    |                         |                           |
    |                  ActionRegistry                     |
    |                         |                           |
@@ -331,7 +331,6 @@ Agent A                 BattleEngine                 Agent B
    |                  Применение Effect                  |
    |                         |                           |
    |                  Проверка окончания                 |
-   |                         |                           |
 ```
 
 ### 5.2. Правила выполнения боя
