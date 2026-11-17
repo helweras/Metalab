@@ -23,6 +23,5 @@ class Agent:
     @property
     def state(self) -> AgentSnapshot:
         return AgentSnapshot(
-            health=self.__current_health,
-            damage=self.__current_damage
+            self.__current_attributes
         )
