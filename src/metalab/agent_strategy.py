@@ -1,10 +1,12 @@
-from metalab.action_registry import ActionRegistry
 from metalab.agent_state import AgentState
-from metalab.action import Action
+from metalab.action import Action, ActionType
+from metalab.target import Target
+
 
 class AgentStrategy:
-    def __init__(self, action_registry: ActionRegistry):
-        self.action_registry = action_registry
 
     def choose_action(self, state: AgentState) -> Action:
-        return self.action_registry.attack
+        return Action(
+            action_type=ActionType.ATTACK,
+            target=Target.ENEMY,
+        )
