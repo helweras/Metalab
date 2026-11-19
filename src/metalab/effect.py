@@ -12,8 +12,8 @@ class Effect:
 
     def __post_init__(self):
         if not isinstance(self.action_result, ActionResult):
-            raise TypeError("action_rule must be an ActionResult")
+            raise TypeError("action_result must be an ActionResult")
 
         if not isinstance(self.target, Target):
-            raise TypeError("Target must be an Target")
+            raise TypeError("Target must be a Target")
 

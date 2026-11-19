@@ -1,3 +1,5 @@
+from metalab.action_result import ActionResult
+
 # MetaLab — техническая документация
 
 ## 1. Архитектура проекта
@@ -361,9 +363,8 @@ else:
 Затем применяет изменение:
 
 ```python
-target_agent.apply_change(
-    effect.result.attribute,
-    effect.result.value
+target_agent.apply_action_result(
+    ActionResult
 )
 ```
 
@@ -407,7 +408,7 @@ Effect
 ActionResult
   |
   v
-Agent.apply_change()
+Agent.apply_action_result()
 ```
 
 Схема показывает основные связи, а не полный граф импортов. BattleEngine координирует компоненты, но не должен содержать реализацию конкретных правил действий.

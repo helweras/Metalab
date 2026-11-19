@@ -4,7 +4,7 @@ from metalab.action_rules.base import ActionRules
 from metalab.action_rules.attack import AttackRules
 
 
-class ActionRegistry:
+class ActionRulesRegistry:
     def __init__(self) -> None:
         self.__rules: dict[ActionType, ActionRules] = {
             ActionType.ATTACK: AttackRules(),

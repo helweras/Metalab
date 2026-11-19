@@ -1,9 +1,10 @@
 import pytest
+from contextlib import nullcontext as does_not_raise
 
 from metalab.agent import Agent
 from metalab.build import Build
-from contextlib import nullcontext as does_not_raise
-
+from metalab.attribute import Attribute
+from metalab.action_result import ActionResult
 
 class TestAgent:
     @pytest.mark.parametrize("build", [
@@ -15,52 +16,57 @@ class TestAgent:
         assert isinstance(agent, Agent)
 
     def test_state(self):
-        build_from_agent = Build(damage=4, health=6)
-        agent = Agent(build_from_agent)
+        agent = Agent(Build(damage=4, health=6))
         agent_state = agent.state
-        assert agent_state.health == 6
-        assert agent_state.damage == 4
+        assert agent_state.attributes[Attribute.HEALTH] == 6
+        assert agent_state.attributes[Attribute.DAMAGE] == 4
 
-    # @pytest.mark.parametrize("damage", [
-    #     1, 2, 3, 4, 5, 6, -1, 0
-    # ])
-    # def test_take_damage(self, damage):
-    #     health = 5
-    #     build_from_agent = Build(damage=5, health=health)
-    #     agent = Agent(build_from_agent)
-    #     agent.take_damage(damage)
-    #     assert agent.health == health - damage
+    @pytest.mark.parametrize(
+        "health_change, is_alive",
+        [
+            (-1, True),
+            (-2, True),
+            (-3, True),
+            (-4, False),
+            (-5, False),
+            (1, True),
+            (0, True),
+        ],
+    )
+    def test_is_alive(self, health_change, is_alive):
+        agent = Agent(Build(damage=6, health=4))
 
-    @pytest.mark.parametrize("damage, is_alive", [
-        (1, True),
-        (2, True),
-        (3, True),
-        (4, False),
-        (5, False),
-        (-1, True),
-        (0, True)
-    ])
-    def test_is_alive(self, damage, is_alive):
-        build_from_agent = Build(damage=6, health=4)
-        agent = Agent(build_from_agent)
-        agent.take_damage(damage)
+        agent.apply_action_result(
+            ActionResult(Attribute.HEALTH, health_change)
+        )
+
         assert agent.is_alive is is_alive
 
-    @pytest.mark.parametrize("damage, expected", [
-        (1, does_not_raise()),
-        (2, does_not_raise()),
-        ("5", pytest.raises(TypeError)),
-        (5.7, pytest.raises(TypeError)),
-        (True, pytest.raises(TypeError)),
-    ])
-    def test_take_damage_raise(self, damage, expected):
-        build_from_agent = Build(damage=4, health=6)
-        agent = Agent(build_from_agent)
-        with expected:
-            agent.take_damage(damage)
+    @pytest.mark.parametrize(
+        "health_change",
+        [
+            -1,
+            -2,
+            1,
+            2,
+            0,
+        ],
+    )
+    def test_apply_action_result(self, health_change):
+        agent = Agent(Build(damage=4, health=6))
+        result = ActionResult(Attribute.HEALTH, health_change)
 
-    def test_immutable(self):
-        build_from_agent = Build(damage=4, health=6)
-        agent = Agent(build_from_agent)
-        agent.take_damage(5)
+        agent.apply_action_result(result)
+
+        assert agent.state.attributes[Attribute.HEALTH] == 6 + health_change
+
+    def test_build_is_immutable(self):
+        build = Build(damage=4, health=6)
+        agent = Agent(build)
+
+        agent.apply_action_result(
+            ActionResult(Attribute.HEALTH, -5)
+        )
+
         assert agent.build.health == 6
+        assert agent.build.damage == 4

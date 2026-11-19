@@ -11,6 +11,7 @@ class TestBuild:
                                  (6, 6, does_not_raise()),
                                  (0, 11, pytest.raises(ValueError)),
                                  (-1, 12, pytest.raises(ValueError)),
+                                 (1, -1, pytest.raises(ValueError)),
                                  (3.5, 8, pytest.raises(TypeError)),
                                  (7, "4", pytest.raises(TypeError)),
                                  (True, 10, pytest.raises(TypeError)),
