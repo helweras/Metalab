@@ -29,7 +29,7 @@ class BattleRules:
             raise ValueError("current_round must be positive")
 
         if not agent_a_alive and not agent_b_alive:
-            return BattleOutcome.DRAW
+            return BattleOutcome.BOTH_LOST
 
         if not agent_a_alive:
             return BattleOutcome.B_WON

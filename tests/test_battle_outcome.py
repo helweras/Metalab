@@ -6,7 +6,7 @@ class TestBattleOutcome:
         assert set(BattleOutcome) == {
             BattleOutcome.A_WON,
             BattleOutcome.B_WON,
-            BattleOutcome.DRAW,
+            BattleOutcome.BOTH_LOST,
             BattleOutcome.BOTH_WON,
         }
 

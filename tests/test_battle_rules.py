@@ -10,7 +10,7 @@ class TestBattleRules:
     @pytest.mark.parametrize(
         "agent_a_alive, agent_b_alive, current_round, expected",
         [
-            (False, False, 1, BattleOutcome.DRAW),
+            (False, False, 1, BattleOutcome.BOTH_LOST),
             (False, True, 1, BattleOutcome.B_WON),
             (True, False, 1, BattleOutcome.A_WON),
             (True, True, 1, None),
