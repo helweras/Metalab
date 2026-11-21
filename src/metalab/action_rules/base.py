@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 
-from metalab.agent_state import AgentState
+from metalab.agent_perspective import AgentPerspective
 from metalab.target import Target
 from metalab.effect import Effect
 
@@ -8,7 +8,7 @@ from metalab.effect import Effect
 
 class ActionRules(ABC):
     @abstractmethod
-    def calculate_effects(self, state: AgentState, target: Target) -> tuple[Effect,...] :
+    def calculate_effects(self, state: AgentPerspective, target: Target) -> tuple[Effect,...] :
         pass
 
 

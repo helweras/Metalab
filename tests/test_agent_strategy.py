@@ -1,4 +1,4 @@
-from metalab.agent_state import AgentState
+from metalab.agent_perspective import AgentPerspective
 from metalab.agent_snapshot import AgentSnapshot
 from metalab.action import Action, ActionType
 from metalab.target import Target
@@ -10,7 +10,7 @@ from metalab.const.action_const import AVAILABLE_ACTIONS
 class TestAgentStrategy:
     def test_choose_action(self):
         strategy = AgentStrategy(AVAILABLE_ACTIONS)
-        state = AgentState(
+        state = AgentPerspective(
             own_state=AgentSnapshot({
                 Attribute.HEALTH: 100,
                 Attribute.DAMAGE: 10,

@@ -1,8 +1,7 @@
-
 import pytest
 
 from metalab.action_rules.attack import AttackRules
-from metalab.agent_state import AgentState
+from metalab.agent_perspective import AgentPerspective
 from metalab.agent_snapshot import AgentSnapshot
 from metalab.attribute import Attribute
 from metalab.effect import Effect
@@ -20,7 +19,7 @@ class TestAttackRules:
         ],
     )
     def test_calculate_effects(self, damage, target):
-        state = AgentState(
+        state = AgentPerspective(
             own_state=AgentSnapshot({
                 Attribute.HEALTH: 100,
                 Attribute.DAMAGE: damage,

@@ -1,4 +1,4 @@
-from metalab.agent_state import AgentState
+from metalab.agent_perspective import AgentPerspective
 from metalab.action import Action, ActionType
 from metalab.target import Target
 
@@ -8,7 +8,7 @@ class AgentStrategy:
     def __init__(self, available_actions: tuple[ActionType, ...]) -> None:
         self.__available_actions = available_actions
 
-    def choose_action(self, state: AgentState) -> Action:
+    def choose_action(self, own_perspective: AgentPerspective) -> Action:
         action_type = self.__available_actions[0]
         if action_type == ActionType.ATTACK:
             target = Target.ENEMY

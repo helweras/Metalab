@@ -17,7 +17,7 @@ class TestAgent:
 
     def test_state(self):
         agent = Agent(Build(damage=4, health=6))
-        agent_state = agent.state
+        agent_state = agent.snapshot
         assert agent_state.attributes[Attribute.HEALTH] == 6
         assert agent_state.attributes[Attribute.DAMAGE] == 4
 
@@ -58,7 +58,7 @@ class TestAgent:
 
         agent.apply_action_result(result)
 
-        assert agent.state.attributes[Attribute.HEALTH] == 6 + health_change
+        assert agent.snapshot.attributes[Attribute.HEALTH] == 6 + health_change
 
     def test_build_is_immutable(self):
         build = Build(damage=4, health=6)

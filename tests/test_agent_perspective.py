@@ -1,6 +1,6 @@
 import pytest
 from contextlib import nullcontext as does_not_raise
-from metalab.agent_state import AgentState
+from metalab.agent_perspective import AgentPerspective
 from dataclasses import FrozenInstanceError
 from metalab.agent_snapshot import AgentSnapshot
 from metalab.attribute import Attribute
@@ -33,12 +33,12 @@ class TestAgentState:
     ])
     def test_init_agent_state(self, own_snap:AgentSnapshot, enemy_snap:AgentSnapshot, expectation):
         with expectation:
-            agent_state = AgentState(own_snap, enemy_snap)
+            agent_state = AgentPerspective(own_snap, enemy_snap)
             assert agent_state.own_state == own_snap
             assert agent_state.enemy_state == enemy_snap
 
     def test_immutable_state(self, own_snapshot, enemy_snapshot):
-        agent_state = AgentState(own_state=own_snapshot, enemy_state=enemy_snapshot)
+        agent_state = AgentPerspective(own_state=own_snapshot, enemy_state=enemy_snapshot)
 
         with pytest.raises(FrozenInstanceError):
             agent_state.own_state = enemy_snapshot

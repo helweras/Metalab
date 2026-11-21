@@ -18,7 +18,7 @@ class Agent:
 
 
     @property
-    def state(self) -> AgentSnapshot:
+    def snapshot(self) -> AgentSnapshot:
         return AgentSnapshot(
             self.__current_attributes
         )
