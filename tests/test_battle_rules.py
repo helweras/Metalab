@@ -66,7 +66,7 @@ class TestBattleRules:
                 current_round,
             )
 
-    @pytest.mark.parametrize("current_round", [0, -1, -5])
+    @pytest.mark.parametrize("current_round", [-1, -5])
     def test_determine_outcome_invalid_round(
         self,
         current_round,

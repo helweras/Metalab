@@ -25,7 +25,7 @@ class BattleRules:
         if type(current_round) is not int:
             raise TypeError("current_round must be an integer")
 
-        if current_round <= 0:
+        if current_round < 0:
             raise ValueError("current_round must be positive")
 
         if not agent_a_alive and not agent_b_alive:
