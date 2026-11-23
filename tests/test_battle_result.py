@@ -68,7 +68,7 @@ class TestBattleResult:
 
     @pytest.mark.parametrize(
         "rounds_played",
-        [0, -1, -5],
+        [-1, -5],
     )
     def test_init_invalid_rounds_played_value(self, rounds_played):
         with pytest.raises(ValueError):

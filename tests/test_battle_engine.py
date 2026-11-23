@@ -17,8 +17,11 @@ from metalab.const.action_const import AVAILABLE_ACTIONS
 
 
 class TestBattleEngine:
+    """Тесты применения эффектов и выполнения боевых сценариев."""
+
     @staticmethod
     def create_engine(max_rounds=5):
+        """Создает боевой движок с заданным ограничением раундов."""
         return BattleEngine(
             action_rules=ActionRulesRegistry(),
             battle_rules=BattleRules(BattleSettings(max_rounds)),
@@ -26,9 +29,13 @@ class TestBattleEngine:
 
     @staticmethod
     def create_strategy():
+        """Создает стратегию со всеми доступными действиями."""
         return AgentStrategy(AVAILABLE_ACTIONS)
 
+    # Применение эффектов
+
     def test_apply_effects_to_self(self):
+        """Проверяет применение эффекта к самому источнику."""
         engine = self.create_engine()
         agent = Agent(Build(damage=5, health=6))
         enemy = Agent(Build(damage=3, health=8))
@@ -44,6 +51,7 @@ class TestBattleEngine:
         assert enemy.snapshot.attributes[Attribute.HEALTH] == 8
 
     def test_apply_effects_to_enemy(self):
+        """Проверяет применение эффекта к противнику."""
         engine = self.create_engine()
         agent = Agent(Build(damage=5, health=6))
         enemy = Agent(Build(damage=3, health=8))
@@ -59,6 +67,7 @@ class TestBattleEngine:
         assert enemy.snapshot.attributes[Attribute.HEALTH] == 4
 
     def test_apply_multiple_effects(self):
+        """Проверяет последовательное применение нескольких эффектов."""
         engine = self.create_engine()
         agent = Agent(Build(damage=5, health=6))
         enemy = Agent(Build(damage=3, health=8))
@@ -75,6 +84,7 @@ class TestBattleEngine:
         assert enemy.snapshot.attributes[Attribute.HEALTH] == 5
 
     def test_apply_empty_effects(self):
+        """Проверяет, что пустой набор эффектов не изменяет состояние агентов."""
         engine = self.create_engine()
         agent = Agent(Build(damage=5, health=6))
         enemy = Agent(Build(damage=3, health=8))
@@ -84,7 +94,10 @@ class TestBattleEngine:
         assert agent.snapshot.attributes[Attribute.HEALTH] == 6
         assert enemy.snapshot.attributes[Attribute.HEALTH] == 8
 
+    # Выполнение боя
+
     def test_start_battle_both_agents_survive_max_rounds(self):
+        """Проверяет завершение боя по достижении максимального числа раундов."""
         engine = self.create_engine(max_rounds=1)
 
         agent_a = Agent(Build(damage=3, health=8))
@@ -103,6 +116,7 @@ class TestBattleEngine:
         assert result.agent_b_state.attributes[Attribute.HEALTH] == 4
 
     def test_start_battle_applies_second_action_after_agent_b_dies(self):
+        """Проверяет применение обоих действий, даже если первая атака смертельна."""
         engine = self.create_engine()
 
         agent_a = Agent(Build(damage=6, health=6))
@@ -121,6 +135,7 @@ class TestBattleEngine:
         assert result.agent_b_state.attributes[Attribute.HEALTH] == 0
 
     def test_start_battle_agent_a_loses(self):
+        """Проверяет победу агента B при гибели агента A."""
         engine = self.create_engine()
 
         agent_a = Agent(Build(damage=2, health=8))
@@ -139,6 +154,7 @@ class TestBattleEngine:
         assert result.agent_b_state.attributes[Attribute.HEALTH] == 1
 
     def test_start_battle_agent_b_loses(self):
+        """Проверяет победу агента A при гибели агента B."""
         engine = self.create_engine()
 
         agent_a = Agent(Build(damage=8, health=3))
@@ -156,7 +172,10 @@ class TestBattleEngine:
         assert result.agent_a_state.attributes[Attribute.HEALTH] == 1
         assert result.agent_b_state.attributes[Attribute.HEALTH] == 0
 
+    # Проверка входных условий
+
     def test_start_battle_agent_cannot_fight_itself(self):
+        """Проверяет запрет боя агента с самим собой."""
         engine = self.create_engine()
         agent = Agent(Build(damage=3, health=7))
 
