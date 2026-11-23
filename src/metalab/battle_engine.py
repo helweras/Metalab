@@ -47,6 +47,9 @@ class BattleEngine:
         strategy_a: AgentStrategy,
         strategy_b: AgentStrategy,
     ) -> BattleResult:
+
+        if agent_a is agent_b:
+            raise ValueError("An agent cannot fight itself")
         # Счётчик начинается с нуля и увеличивается после каждого раунда.
         current_round = 0
 

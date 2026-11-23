@@ -17,8 +17,8 @@ class BattleResult:
         if type(self.rounds_played) is not int:
             raise TypeError("rounds_played must be an integer")
 
-        if self.rounds_played <= 0:
-            raise ValueError("rounds_played must be positive")
+        if self.rounds_played < 0:
+            raise ValueError("rounds_played must be non-negative")
 
         if not isinstance(self.agent_a_state, AgentSnapshot):
             raise TypeError("agent_a_state must be an AgentSnapshot")
