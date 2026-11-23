@@ -1,12 +1,11 @@
-
-from metalab.agent import Agent
-from metalab.agent_strategy import AgentStrategy
-from metalab.battle_rules import BattleRules
-from metalab.agent_perspective import AgentPerspective
 from metalab.action_rules_registry import ActionRulesRegistry
+from metalab.agent import Agent
+from metalab.agent_perspective import AgentPerspective
+from metalab.agent_strategy import AgentStrategy
+from metalab.battle_result import BattleResult
+from metalab.battle_rules import BattleRules
 from metalab.effect import Effect
 from metalab.target import Target
-from metalab.battle_result import BattleResult
 
 
 class BattleEngine:
@@ -66,7 +65,8 @@ class BattleEngine:
         # Раунды выполняются, пока правила боя не определят его исход.
         while outcome is None:
             # Создаём снимки состояния обоих агентов в начале раунда.
-            # Оба участника будут принимать решения на основе одного и того же состояния боя.
+            # Оба участника будут принимать решения
+            # на основе одного и того же состояния боя.
             snapshot_a = agent_a.snapshot
             snapshot_b = agent_b.snapshot
 

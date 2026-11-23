@@ -1,7 +1,7 @@
-
 import pytest
 
 from metalab.action_result import ActionResult
+from metalab.action_rules_registry import ActionRulesRegistry
 from metalab.agent import Agent
 from metalab.agent_strategy import AgentStrategy
 from metalab.attribute import Attribute
@@ -10,10 +10,9 @@ from metalab.battle_outcome import BattleOutcome
 from metalab.battle_rules import BattleRules
 from metalab.battle_settings import BattleSettings
 from metalab.build import Build
-from metalab.action_rules_registry import ActionRulesRegistry
+from metalab.const.action_const import AVAILABLE_ACTIONS
 from metalab.effect import Effect
 from metalab.target import Target
-from metalab.const.action_const import AVAILABLE_ACTIONS
 
 
 class TestBattleEngine:

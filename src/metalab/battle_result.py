@@ -3,6 +3,7 @@ from dataclasses import dataclass
 from metalab.agent_snapshot import AgentSnapshot
 from metalab.battle_outcome import BattleOutcome
 
+
 @dataclass(frozen=True)
 class BattleResult:
     outcome: BattleOutcome

@@ -1,5 +1,6 @@
-from metalab.action_rules.base import ActionRules
 import pytest
+
+from metalab.action_rules.base import ActionRules
 
 
 class TestActionRules:
@@ -21,7 +22,3 @@ class TestActionRules:
 
         action_rules = CompleteRules()
         assert isinstance(action_rules, CompleteRules)
-
-
-
-

@@ -1,10 +1,9 @@
-from metalab.agent_perspective import AgentPerspective
 from metalab.action import Action, ActionType
+from metalab.agent_perspective import AgentPerspective
 from metalab.target import Target
 
 
 class AgentStrategy:
-
     def __init__(self, available_actions: tuple[ActionType, ...]) -> None:
         self.__available_actions = available_actions
 

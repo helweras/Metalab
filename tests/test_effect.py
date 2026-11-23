@@ -1,9 +1,10 @@
-import pytest
 from dataclasses import FrozenInstanceError
 
-from metalab.effect import Effect
+import pytest
+
 from metalab.action_result import ActionResult
 from metalab.attribute import Attribute
+from metalab.effect import Effect
 from metalab.target import Target
 
 

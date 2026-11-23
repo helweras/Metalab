@@ -1,4 +1,3 @@
-
 import pytest
 
 from metalab.battle_outcome import BattleOutcome

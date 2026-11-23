@@ -1,6 +1,7 @@
-import pytest
 from dataclasses import FrozenInstanceError
 from types import MappingProxyType
+
+import pytest
 
 from metalab.agent_snapshot import AgentSnapshot
 from metalab.attribute import Attribute

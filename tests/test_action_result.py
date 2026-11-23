@@ -1,5 +1,6 @@
-import pytest
 from dataclasses import FrozenInstanceError
+
+import pytest
 
 from metalab.action_result import ActionResult
 from metalab.attribute import Attribute

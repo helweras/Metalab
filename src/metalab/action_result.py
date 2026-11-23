@@ -1,4 +1,5 @@
 from dataclasses import dataclass
+
 from metalab.attribute import Attribute
 
 

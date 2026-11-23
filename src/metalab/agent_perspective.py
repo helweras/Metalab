@@ -1,4 +1,5 @@
 from dataclasses import dataclass
+
 from metalab.agent_snapshot import AgentSnapshot
 
 
@@ -13,4 +14,3 @@ class AgentPerspective:
 
         if not isinstance(self.enemy_state, AgentSnapshot):
             raise TypeError("enemy_state must be an AgentSnapshot")
-

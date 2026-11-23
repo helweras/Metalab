@@ -1,6 +1,6 @@
+from dataclasses import FrozenInstanceError
 
 import pytest
-from dataclasses import FrozenInstanceError
 
 from metalab.agent_snapshot import AgentSnapshot
 from metalab.attribute import Attribute
@@ -19,14 +19,18 @@ class TestBattleResult:
         ],
     )
     def test_init(self, outcome):
-        agent_a_state = AgentSnapshot({
-            Attribute.HEALTH: 10,
-            Attribute.DAMAGE: 3,
-        })
-        agent_b_state = AgentSnapshot({
-            Attribute.HEALTH: 8,
-            Attribute.DAMAGE: 2,
-        })
+        agent_a_state = AgentSnapshot(
+            {
+                Attribute.HEALTH: 10,
+                Attribute.DAMAGE: 3,
+            }
+        )
+        agent_b_state = AgentSnapshot(
+            {
+                Attribute.HEALTH: 8,
+                Attribute.DAMAGE: 2,
+            }
+        )
 
         result = BattleResult(
             outcome=outcome,

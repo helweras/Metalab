@@ -20,14 +20,18 @@ class TestAttackRules:
     )
     def test_calculate_effects(self, damage, target):
         state = AgentPerspective(
-            own_state=AgentSnapshot({
-                Attribute.HEALTH: 100,
-                Attribute.DAMAGE: damage,
-            }),
-            enemy_state=AgentSnapshot({
-                Attribute.HEALTH: 100,
-                Attribute.DAMAGE: 3,
-            }),
+            own_state=AgentSnapshot(
+                {
+                    Attribute.HEALTH: 100,
+                    Attribute.DAMAGE: damage,
+                }
+            ),
+            enemy_state=AgentSnapshot(
+                {
+                    Attribute.HEALTH: 100,
+                    Attribute.DAMAGE: 3,
+                }
+            ),
         )
 
         rules = AttackRules()

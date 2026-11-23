@@ -1,8 +1,8 @@
 import pytest
 
-from metalab.action_type import ActionType
 from metalab.action_rules.attack import AttackRules
 from metalab.action_rules_registry import ActionRulesRegistry
+from metalab.action_type import ActionType
 
 
 class TestActionRegistry:

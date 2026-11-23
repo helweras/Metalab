@@ -1,7 +1,6 @@
-
-from metalab.action_type import ActionType
-from metalab.action_rules.base import ActionRules
 from metalab.action_rules.attack import AttackRules
+from metalab.action_rules.base import ActionRules
+from metalab.action_type import ActionType
 
 
 class ActionRulesRegistry:

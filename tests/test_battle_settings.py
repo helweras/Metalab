@@ -1,6 +1,6 @@
+from dataclasses import FrozenInstanceError
 
 import pytest
-from dataclasses import FrozenInstanceError
 
 from metalab.battle_settings import BattleSettings
 

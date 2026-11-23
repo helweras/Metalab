@@ -1,9 +1,9 @@
 import pytest
 
-from metalab.agent import Agent
-from metalab.build import Build
-from metalab.attribute import Attribute
 from metalab.action_result import ActionResult
+from metalab.agent import Agent
+from metalab.attribute import Attribute
+from metalab.build import Build
 
 
 class TestAgent:
@@ -36,30 +36,19 @@ class TestAgent:
         """Проверяет состояние жизни агента после изменения здоровья."""
         agent = Agent(Build(damage=6, health=4))
 
-        agent.apply_action_result(
-            ActionResult(Attribute.HEALTH, health_change)
-        )
+        agent.apply_action_result(ActionResult(Attribute.HEALTH, health_change))
 
         assert agent.is_alive is is_alive
 
     @pytest.mark.parametrize(
         ("health_change", "expected_health"),
-        [
-            (-1, 5),
-            (-3, 3),
-            (-6, 0),
-            (1, 6),
-            (5, 6),
-            (-7, -1)
-        ],
+        [(-1, 5), (-3, 3), (-6, 0), (1, 6), (5, 6), (-7, -1)],
     )
     def test_apply_action_result(self, health_change, expected_health):
         """Проверяет изменение здоровья с учетом максимального значения."""
         agent = Agent(Build(damage=4, health=6))
 
-        agent.apply_action_result(
-            ActionResult(Attribute.HEALTH, health_change)
-        )
+        agent.apply_action_result(ActionResult(Attribute.HEALTH, health_change))
 
         assert agent.snapshot.attributes[Attribute.HEALTH] == expected_health
 
@@ -68,9 +57,7 @@ class TestAgent:
         build = Build(damage=4, health=6)
         agent = Agent(build)
 
-        agent.apply_action_result(
-            ActionResult(Attribute.HEALTH, -5)
-        )
+        agent.apply_action_result(ActionResult(Attribute.HEALTH, -5))
 
         assert agent.build.health == 6
         assert agent.build.damage == 4
@@ -89,12 +76,8 @@ class TestAgent:
         """Проверяет последовательное получение урона и лечение."""
         agent = Agent(Build(damage=4, health=6))
 
-        agent.apply_action_result(
-            ActionResult(Attribute.HEALTH, -damage)
-        )
-        agent.apply_action_result(
-            ActionResult(Attribute.HEALTH, healing)
-        )
+        agent.apply_action_result(ActionResult(Attribute.HEALTH, -damage))
+        agent.apply_action_result(ActionResult(Attribute.HEALTH, healing))
 
         assert agent.snapshot.attributes[Attribute.HEALTH] == expected_health
 
@@ -107,9 +90,7 @@ class TestAgent:
             object(),
         ],
     )
-    def test_apply_action_result_with_invalid_argument(
-        self, invalid_action_result
-    ):
+    def test_apply_action_result_with_invalid_argument(self, invalid_action_result):
         """Проверяет ошибку при передаче некорректного аргумента."""
         agent = Agent(Build(damage=4, health=6))
 

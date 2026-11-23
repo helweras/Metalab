@@ -1,8 +1,7 @@
 from dataclasses import dataclass
-from metalab.target import Target
+
 from metalab.action_result import ActionResult
-
-
+from metalab.target import Target
 
 
 @dataclass(frozen=True)
@@ -16,4 +15,3 @@ class Effect:
 
         if not isinstance(self.target, Target):
             raise TypeError("Target must be a Target")
-

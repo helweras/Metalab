@@ -1,7 +1,7 @@
-from metalab.build import Build
+from metalab.action_result import ActionResult
 from metalab.agent_snapshot import AgentSnapshot
 from metalab.attribute import Attribute
-from metalab.action_result import ActionResult
+from metalab.build import Build
 
 
 class Agent:
@@ -19,9 +19,7 @@ class Agent:
 
     @property
     def snapshot(self) -> AgentSnapshot:
-        return AgentSnapshot(
-            self.__current_attributes
-        )
+        return AgentSnapshot(self.__current_attributes)
 
     def apply_action_result(self, action_result: ActionResult) -> None:
         if not isinstance(action_result, ActionResult):

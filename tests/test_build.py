@@ -1,27 +1,27 @@
-import pytest
-from metalab.build import Build
 from contextlib import nullcontext as does_not_raise
 from dataclasses import FrozenInstanceError
 
+import pytest
+
+from metalab.build import Build
+
 
 class TestBuild:
-    @pytest.mark.parametrize("damage, health, expectation",
-                             [
-                                 (6, 4, does_not_raise()),
-                                 (6, 6, does_not_raise()),
-                                 (0, 11, pytest.raises(ValueError)),
-                                 (-1, 12, pytest.raises(ValueError)),
-                                 (1, -1, pytest.raises(ValueError)),
-                                 (3.5, 8, pytest.raises(TypeError)),
-                                 (7, "4", pytest.raises(TypeError)),
-                                 (True, 10, pytest.raises(TypeError)),
-                                 (7, 6, pytest.raises(ValueError)),
-                             ])
-    def test_build(
-            self, damage,
-            health,
-            expectation
-    ):
+    @pytest.mark.parametrize(
+        "damage, health, expectation",
+        [
+            (6, 4, does_not_raise()),
+            (6, 6, does_not_raise()),
+            (0, 11, pytest.raises(ValueError)),
+            (-1, 12, pytest.raises(ValueError)),
+            (1, -1, pytest.raises(ValueError)),
+            (3.5, 8, pytest.raises(TypeError)),
+            (7, "4", pytest.raises(TypeError)),
+            (True, 10, pytest.raises(TypeError)),
+            (7, 6, pytest.raises(ValueError)),
+        ],
+    )
+    def test_build(self, damage, health, expectation):
         with expectation:
             build = Build(damage, health)
             assert build.damage == damage
