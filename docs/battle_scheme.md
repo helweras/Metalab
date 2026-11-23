@@ -39,8 +39,8 @@ flowchart TD
     ACTION_B --> RULE_B[Получение правила действия B]
     RULE_A --> EFFECT_A[Расчёт effects A]
     RULE_B --> EFFECT_B[Расчёт effects B]
-    EFFECT_A --> APPLY_A[Применение effects A к живым объектам]
-    EFFECT_B --> APPLY_B[Применение effects B к живым объектам]
+    EFFECT_A --> APPLY_A[Применение effects A к агентам]
+    EFFECT_B --> APPLY_B[Применение effects B к агентам]
     APPLY_A --> ORDER[Эффекты A применяются раньше эффектов B]
     APPLY_B --> ORDER
     ORDER --> FINISH([Конец раунда])
