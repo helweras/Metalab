@@ -2,6 +2,7 @@ from metalab.action_rules_registry import ActionRulesRegistry
 from metalab.agent import Agent
 from metalab.agent_perspective import AgentPerspective
 from metalab.agent_strategy import AgentStrategy
+from metalab.battle_observer import BattleObserver
 from metalab.battle_result import BattleResult
 from metalab.battle_rules import BattleRules
 from metalab.effect import Effect
@@ -13,12 +14,14 @@ class BattleEngine:
         self,
         action_rules: ActionRulesRegistry,
         battle_rules: BattleRules,
+        observers: tuple[BattleObserver, ...] = (),
     ) -> None:
         # Правила исполнения действий и определения исхода боя.
         # Не зависят от конкретных участников и могут использоваться
         # при проведении нескольких боёв.
         self.__action_rules = action_rules
         self.__battle_rules = battle_rules
+        self.__observers = observers
 
     def apply_effects(
         self,
@@ -62,6 +65,9 @@ class BattleEngine:
             current_round=current_round,
         )
 
+        for observer in self.__observers:
+            observer.on_battle_start(agent_a.snapshot, agent_b.snapshot)
+
         # Раунды выполняются, пока правила боя не определят его исход.
         while outcome is None:
             # Создаём снимки состояния обоих агентов в начале раунда.
@@ -69,6 +75,13 @@ class BattleEngine:
             # на основе одного и того же состояния боя.
             snapshot_a = agent_a.snapshot
             snapshot_b = agent_b.snapshot
+
+            for observer in self.__observers:
+                observer.on_round_start(
+                    current_round + 1,
+                    snapshot_a,
+                    snapshot_b,
+                )
 
             # Формируем перспективы участников:
             # каждый агент видит собственное состояние и состояние противника.
@@ -85,6 +98,13 @@ class BattleEngine:
             action_a = strategy_a.choose_action(a_perspective)
             action_b = strategy_b.choose_action(b_perspective)
 
+            for observer in self.__observers:
+                observer.on_actions_selected(
+                    current_round + 1,
+                    action_a,
+                    action_b,
+                )
+
             # Получаем правила исполнения выбранных действий.
             action_rule_a = self.__action_rules.get(action_a.action_type)
             action_rule_b = self.__action_rules.get(action_b.action_type)
@@ -100,12 +120,27 @@ class BattleEngine:
                 action_b.target,
             )
 
+            for observer in self.__observers:
+                observer.on_effects_calculated(
+                    current_round + 1,
+                    effects_tuple_a,
+                    effects_tuple_b,
+                )
+
             # Применяем эффекты первого участника.
             self.apply_effects(
                 source_agent=agent_a,
                 target_agent=agent_b,
                 effects=effects_tuple_a,
             )
+
+            for observer in self.__observers:
+                observer.on_effects_applied(
+                    current_round + 1,
+                    "A",
+                    agent_a.snapshot,
+                    agent_b.snapshot,
+                )
 
             # Применяем эффекты второго участника.
             # Даже если первый участник уничтожил второго,
@@ -115,6 +150,14 @@ class BattleEngine:
                 target_agent=agent_a,
                 effects=effects_tuple_b,
             )
+
+            for observer in self.__observers:
+                observer.on_effects_applied(
+                    current_round + 1,
+                    "B",
+                    agent_a.snapshot,
+                    agent_b.snapshot,
+                )
 
             # Раунд считается завершённым после применения всех эффектов.
             current_round += 1
@@ -131,10 +174,22 @@ class BattleEngine:
                 current_round=current_round,
             )
 
+            for observer in self.__observers:
+                observer.on_round_end(
+                    current_round,
+                    alive_a,
+                    alive_b,
+                )
+
         # Возвращаем результат боя с итоговым состоянием обоих участников.
-        return BattleResult(
+        result = BattleResult(
             outcome=outcome,
             rounds_played=current_round,
             agent_a_state=agent_a.snapshot,
             agent_b_state=agent_b.snapshot,
         )
+
+        for observer in self.__observers:
+            observer.on_battle_end(result)
+
+        return result
