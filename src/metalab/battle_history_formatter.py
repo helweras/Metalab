@@ -1,27 +1,35 @@
 from metalab.agent_snapshot import AgentSnapshot
-from metalab.battle_history import BattleHistory
+from metalab.battle_result import BattleResult
 from metalab.effect import Effect
 from metalab.round_record import RoundRecord
 
 
 class BattleHistoryFormatter:
-    """Форматирует историю боя в текстовый вид."""
+    """Форматирует результат и историю боя в текстовый вид."""
 
-    def format(self, history: BattleHistory) -> str:
-        """Форматирует всю историю боя."""
-        if not isinstance(history, BattleHistory):
-            raise TypeError("history должен иметь тип BattleHistory")
-
-        if not history.rounds:
-            return "История боя пуста."
+    def format(self, result: BattleResult) -> str:
+        """Форматирует результат и всю историю боя."""
+        if not isinstance(result, BattleResult):
+            raise TypeError("result должен иметь тип BattleResult")
 
         lines = [
+            "========== РЕЗУЛЬТАТ БОЯ ==========",
+            f"Исход: {result.outcome.name}",
+            f"Раундов проведено: {result.rounds_played}",
+            "",
+            "ФИНАЛЬНОЕ СОСТОЯНИЕ АГЕНТОВ",
+            f"  Агент А: {self._format_snapshot(result.agent_a_state)}",
+            f"  Агент Б: {self._format_snapshot(result.agent_b_state)}",
+            "",
             "========== ИСТОРИЯ БОЯ ==========",
-            f"Всего раундов: {history.total_rounds}",
             "",
         ]
 
-        for record in history:
+        if not result.history.rounds:
+            lines.append("История боя пуста.")
+            return "\n".join(lines)
+
+        for record in result.history:
             lines.extend(self._format_round(record))
 
         lines.append("=================================")
@@ -36,19 +44,23 @@ class BattleHistoryFormatter:
         lines = [
             f"========== РАУНД {record.round_number} ==========",
             "",
-            "АГЕНТ А",
-            f"  Состояние до раунда: {self._format_snapshot(record.agent_a_before)}",
+            "СОСТОЯНИЕ В НАЧАЛЕ РАУНДА",
+            f"  Агент А: {self._format_snapshot(record.agent_a_before)}",
+            f"  Агент Б: {self._format_snapshot(record.agent_b_before)}",
+            "",
+            "ДЕЙСТВИЕ АГЕНТА А",
             f"  Действие: {record.action_a.action_type.name}",
             f"  Цель: {record.action_a.target.name}",
             f"  Эффекты: {self._format_effects(record.effects_a)}",
-            f"  Состояние после раунда: {self._format_snapshot(record.agent_a_after)}",
             "",
-            "АГЕНТ Б",
-            f"  Состояние до раунда: {self._format_snapshot(record.agent_b_before)}",
+            "ДЕЙСТВИЕ АГЕНТА Б",
             f"  Действие: {record.action_b.action_type.name}",
             f"  Цель: {record.action_b.target.name}",
             f"  Эффекты: {self._format_effects(record.effects_b)}",
-            f"  Состояние после раунда: {self._format_snapshot(record.agent_b_after)}",
+            "",
+            "СОСТОЯНИЕ ПОСЛЕ РАУНДА",
+            f"  Агент А: {self._format_snapshot(record.agent_a_after)}",
+            f"  Агент Б: {self._format_snapshot(record.agent_b_after)}",
             "",
         ]
 
