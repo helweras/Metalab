@@ -2,18 +2,28 @@ from metalab.action_rules_registry import ActionRulesRegistry
 from metalab.agent import Agent
 from metalab.agent_perspective import AgentPerspective
 from metalab.agent_strategy import AgentStrategy
+from metalab.battle_history import BattleHistory
 from metalab.battle_result import BattleResult
 from metalab.battle_rules import BattleRules
 from metalab.effect import Effect
+from metalab.round_record import RoundRecord
 from metalab.target import Target
 
 
 class BattleEngine:
     def __init__(
-        self,
-        action_rules: ActionRulesRegistry,
-        battle_rules: BattleRules,
+            self,
+            action_rules: ActionRulesRegistry,
+            battle_rules: BattleRules,
     ) -> None:
+        if not isinstance(action_rules, ActionRulesRegistry):
+            raise TypeError("action_rules must be an ActionRulesRegistry")
+
+        if not isinstance(battle_rules, BattleRules):
+            raise TypeError("battle_rules must be a BattleRules")
+
+        self.__action_rules = action_rules
+        self.__battle_rules = battle_rules
         # Правила исполнения действий и определения исхода боя.
         # Не зависят от конкретных участников и могут использоваться
         # при проведении нескольких боёв.
@@ -21,14 +31,23 @@ class BattleEngine:
         self.__battle_rules = battle_rules
 
     def apply_effects(
-        self,
-        source_agent: Agent,
-        target_agent: Agent,
-        effects: tuple[Effect, ...],
+            self,
+            source_agent: Agent,
+            target_agent: Agent,
+            effects: tuple[Effect, ...],
     ) -> None:
-        # Применяет рассчитанные эффекты к соответствующим агентам.
-        # SELF — сам агент, выполнивший действие.
-        # ENEMY — его противник.
+        if not isinstance(source_agent, Agent):
+            raise TypeError("source_agent must be an Agent")
+
+        if not isinstance(target_agent, Agent):
+            raise TypeError("target_agent must be an Agent")
+
+        if not isinstance(effects, tuple):
+            raise TypeError("effects must be a tuple")
+
+        if not all(isinstance(effect, Effect) for effect in effects):
+            raise TypeError("all effects must be Effect instances")
+
         for effect in effects:
             if effect.target == Target.SELF:
                 recipient = source_agent
@@ -40,15 +59,29 @@ class BattleEngine:
             recipient.apply_action_result(effect.action_result)
 
     def start_battle(
-        self,
-        agent_a: Agent,
-        agent_b: Agent,
-        strategy_a: AgentStrategy,
-        strategy_b: AgentStrategy,
+            self,
+            agent_a: Agent,
+            agent_b: Agent,
+            strategy_a: AgentStrategy,
+            strategy_b: AgentStrategy,
     ) -> BattleResult:
+
+        if not isinstance(agent_a, Agent):
+            raise TypeError("agent_a must be an Agent")
+
+        if not isinstance(agent_b, Agent):
+            raise TypeError("agent_b must be an Agent")
+
+        if not isinstance(strategy_a, AgentStrategy):
+            raise TypeError("strategy_a must be an AgentStrategy")
+
+        if not isinstance(strategy_b, AgentStrategy):
+            raise TypeError("strategy_b must be an AgentStrategy")
 
         if agent_a is agent_b:
             raise ValueError("An agent cannot fight itself")
+
+        round_records: list[RoundRecord] = []
         # Счётчик начинается с нуля и увеличивается после каждого раунда.
         current_round = 0
 
@@ -119,6 +152,25 @@ class BattleEngine:
             # Раунд считается завершённым после применения всех эффектов.
             current_round += 1
 
+            # Сохраняем состояние обоих участников после завершения раунда.
+            snapshot_a_after = agent_a.snapshot
+            snapshot_b_after = agent_b.snapshot
+
+            # Создаём запись завершённого раунда.
+            round_records.append(
+                RoundRecord(
+                    round_number=current_round,
+                    agent_a_before=snapshot_a,
+                    agent_b_before=snapshot_b,
+                    action_a=action_a,
+                    action_b=action_b,
+                    effects_a=effects_tuple_a,
+                    effects_b=effects_tuple_b,
+                    agent_a_after=snapshot_a_after,
+                    agent_b_after=snapshot_b_after,
+                )
+            )
+
             # Проверяем актуальное состояние участников после раунда.
             alive_a = agent_a.is_alive
             alive_b = agent_b.is_alive
@@ -137,4 +189,5 @@ class BattleEngine:
             rounds_played=current_round,
             agent_a_state=agent_a.snapshot,
             agent_b_state=agent_b.snapshot,
+            history=BattleHistory(rounds=tuple(round_records))
         )

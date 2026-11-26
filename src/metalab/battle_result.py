@@ -1,7 +1,9 @@
+
 from dataclasses import dataclass
 
 from metalab.agent_snapshot import AgentSnapshot
 from metalab.battle_outcome import BattleOutcome
+from metalab.battle_history import BattleHistory
 
 
 @dataclass(frozen=True)
@@ -10,6 +12,7 @@ class BattleResult:
     rounds_played: int
     agent_a_state: AgentSnapshot
     agent_b_state: AgentSnapshot
+    history: BattleHistory
 
     def __post_init__(self):
         if not isinstance(self.outcome, BattleOutcome):
@@ -26,3 +29,6 @@ class BattleResult:
 
         if not isinstance(self.agent_b_state, AgentSnapshot):
             raise TypeError("agent_b_state must be an AgentSnapshot")
+
+        if not isinstance(self.history, BattleHistory):
+            raise TypeError("history must be a BattleHistory")
